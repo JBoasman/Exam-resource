@@ -21,26 +21,12 @@ public abstract class ExpressCompany implements ParcelHandler {
 
 	@Override
 	public void safetyCheckOnItems(Parcel parcel) throws IllegalParcelItemException {
-
-		// TODO
-		// ########## YOUR CODE STARTS HERE ##########
-
-		// ########## YOUR CODE ENDS HERE ##########
-	}
+        for (ItemType item : parcel.getItems()) if (illegalItems.contains(item)) throw new IllegalParcelItemException();
+    }
 
 	public int calculateDistance(Parcel parcel) {
-
-		int distance = 0;
-
-		// TODO
-		// HINT: You can use the functions in Math library, e.g. Math.ceil(),
-		// Math.sqrt(), Math.pow()
-		// ########## YOUR CODE STARTS HERE ##########
-
-		// ########## YOUR CODE ENDS HERE ##########
-
-		return distance;
-	}
+        return (int) Math.ceil(Math.hypot((double) location.x - parcel.getDestination().x, (double) location.y - parcel.getDestination().y));
+    }
 
 	public abstract double calculateQuote(Parcel parcel);
 }

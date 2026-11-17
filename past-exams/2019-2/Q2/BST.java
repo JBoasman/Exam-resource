@@ -24,10 +24,21 @@ public class BST {
 	 */
 	public Boolean find(int value) {
 
-		// start your code
+		Node current = this.root;
 
-		// end your code
+		while (current != null) {
+			if (value == current.value) {
+				return true;
+			} else if (value < current.value) {
+				current = current.left;
+			} else {
+				current = current.right;
+			}
+		}
+		return false;
 	}
+
+
 
 	/**
 	 * Q2 - Task2 TODO: Implement "delete" method. Find the node with {@code value}
@@ -40,10 +51,48 @@ public class BST {
 	 * @param value value of the target node
 	 */
 	public void delete(int value) {
+		Node current = root;
 
-		// start your code
+		// Find the target.
+		while (current != null && current.value != value) {
+			if (value < current.value) {
+				current = current.left;
+			} else {
+				current = current.right;
+			}
+		}
+		//Value doesnt exist
+		if (current == null) {
+			return;
+		}
 
-		// end your code
+		// Two children: copy the successor's value,
+		// then make the successor the node to remove.
+		if (current.left != null && current.right != null) {
+			Node successor = current.right;
+			while (successor.left != null) {
+				successor = successor.left;
+			}
+
+			current.value = successor.value;
+			current = successor;
+		}
+
+		// Current now has at most one child.
+		Node child = current.left != null
+				? current.left : current.right;
+
+		if (child != null) {
+			child.parent = current.parent;
+		}
+
+		if (current.parent == null) {
+			root = child;
+		} else if (current == current.parent.left) {
+			current.parent.left = child;
+		} else {
+			current.parent.right = child;
+		}
 	}
 
 	/**
@@ -55,11 +104,25 @@ public class BST {
 	 * @return Sum of the nodes that have an even number of direct children
 	 */
 	public int sumEvenNodes() {
+		return sumEvenNodes(this.root);
+	}
+
+	public int sumEvenNodes(Node current) {
 		//start your code
-		
-		
-		
-		//end your code
+		if (current == null) {
+			return 0;
+		}
+		int count = 0;
+
+		if ((current.left != null) && (current.right != null)) {
+			count = count + current.value;
+		}
+		if ((current.left == null) && (current.right == null)) {
+			count = count + current.value;
+		}
+		count = count + sumEvenNodes(current.right) + sumEvenNodes(current.left);
+
+		return count;
 	}
 
 	public class Node {

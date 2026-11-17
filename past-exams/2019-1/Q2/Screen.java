@@ -48,10 +48,18 @@ public class Screen {
 	 * @return a string representing the screen including pointer's visited positions, its current position and direction.
 	 */
 	public String trace() {
-		// TODO: Add your implementation here.
-		// hints: append "\n" to create a new line in string
-		return "";
-	}
+        StringBuilder result = new StringBuilder();
+        String icon = switch(pointer.direction) {
+            case Upward -> "^"; case Downward -> "v"; case Left -> "<"; case Right -> ">";
+        };
+        for (int x = 0; x < noOfRows; x++) {
+            for (int y = 0; y < noOfColumns; y++) {
+                result.append(x == pointer.position.x && y == pointer.position.y ? icon : trace[x][y]);
+            }
+            result.append('\n');
+        }
+        return result.toString();
+    }
 	
 	private String getPointerIcon() {
 		switch (pointer.direction) {

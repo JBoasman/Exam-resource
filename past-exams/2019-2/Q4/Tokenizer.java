@@ -19,29 +19,14 @@ public class Tokenizer {
      */
     public void next() {
         _buffer = _buffer.trim();
-        if (_buffer.isEmpty()) {
-            current = null;
-        	return;
-        }
-        
-        if (_buffer.startsWith(Token.Type.LEFT.toString())) 
-            current = new Token(Token.Type.LEFT);
-        
-        if (_buffer.startsWith(Token.Type.RIGHT.toString())) 
-            current = new Token(Token.Type.RIGHT);
-        
-        // TODO: Implement "FORWARD_TO_END" and "BACK_TO_END" tokenization.
-        // TODO: Implement "FORWARD" and "BACK" tokenization.
-        // TODO: Implement "PENUP" and "PENDOWN" tokenization.        
-        // hints:
-        // - Do not consider the case where text is syntactically incorrect.        
-        // - Careful if you use String.startsWith. FORWARD_TO_END and FORWARD starts with
-        //   the same string "FORWARD". Same for the BACK cases.
-        // - Character.isDigit() may be useful in extracting the forward or back value from the buffer.
-        // - Use new Token(<type>, <original token str>, <value>) to return these tokens
-        // - Check the expected outcome in TokenizerTest.java
-
- 
+        if (_buffer.isEmpty()) { current = null; return; }
+        int end = _buffer.indexOf(';');
+        String command = (end < 0 ? _buffer : _buffer.substring(0, end)).trim();
+        String[] parts = command.split("[()\\s]+");
+        Token.Type type = Token.Type.valueOf(parts[0]);
+        Token token = parts.length == 1 ? new Token(type) : new Token(type, command, Integer.parseInt(parts[1]));
+        current = token;
+        _buffer = end < 0 ? "" : _buffer.substring(end + 1);
     }
     
 

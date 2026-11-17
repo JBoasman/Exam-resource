@@ -16,9 +16,12 @@ public class MyUtilTest {
 	@Test
 	public void test() {
 		//start your code
-		
-		
-		
+		//True
+		assertEquals(0, (int) MyUtil.parseDouble(null));
+		//False, False, True
+		assertEquals(0, (int) MyUtil.parseDouble("NoNumber"));
+		//False, True, False
+		assertEquals(123.456, MyUtil.parseDouble("abc123.456efg"), 0.000001);
 		//end your code
 	}
 

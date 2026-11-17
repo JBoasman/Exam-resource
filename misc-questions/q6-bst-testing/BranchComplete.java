@@ -17,7 +17,7 @@ public class BranchComplete {
 	public int DNATreeCalc(int a, int b, int c) {
 		int ret = 0;
 
-		int sum = this.tree.sum(this.tree.root);
+		int sum = this.tree.sum(this.tree.root); //208
 				
 		if (sum < a) {
 			if (sum > b) {

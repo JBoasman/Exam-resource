@@ -46,7 +46,6 @@ public class Something {
 			}
 			sum += n1 + n2;
 		}
-
 		if (method1(n3, n4) == VALUE2) {
 			sum += n3 + n4;
 		}

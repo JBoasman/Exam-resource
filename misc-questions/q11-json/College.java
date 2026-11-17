@@ -1,3 +1,8 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.io.File;
 import java.util.List;
 
@@ -30,15 +35,10 @@ public class College {
 	 * @return
 	 */
 	public static College loadFromJsonFile(File file) {
-
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-
-		return null;
-	}
+        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+            return new Gson().fromJson(reader, College.class);
+        } catch (IOException e) { throw new UncheckedIOException(e); }
+    }
 
 	/**
 	 * Implement this method to merge the courses of the students with the same
@@ -46,13 +46,15 @@ public class College {
 	 * data after merging.
 	 */
 	public void mergeStudents() {
-
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-	}
+        Map<String, LinkedHashSet<String>> merged = new LinkedHashMap<>();
+        for (Student entry : students) {
+            merged.computeIfAbsent(entry.getName(), k -> new LinkedHashSet<>()).addAll(entry.getCourses());
+        }
+        students = new ArrayList<>();
+        for (var entry : merged.entrySet()) {
+            students.add(new Student(entry.getKey(), new ArrayList<>(entry.getValue())));
+        }
+    }
 
 	/**
 	 * Implement this method to write this college into a json file
@@ -60,13 +62,10 @@ public class College {
 	 * @param file
 	 */
 	public void saveToJsonFile(File file) {
-
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-	}
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+            new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
+        } catch (IOException e) { throw new UncheckedIOException(e); }
+    }
 
 	public String getName() {
 		return name;

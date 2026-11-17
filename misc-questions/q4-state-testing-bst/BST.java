@@ -18,8 +18,8 @@ public class BST {
 			} else if (current.key.compareTo(key) > 0) {
 				parent = current;
 				current = current.left;
-			}
-		}
+			} else { return; }
+        }
 
 		if (parent == null && current == null) {
 			this.root = new Node(key);
@@ -34,10 +34,14 @@ public class BST {
 	}
 
 	public List<Key> invertedPreOrder() {
-		// TODO
-		// HINT: Use recursion
-		// START YOUR CODE
-
-		// END YOUR CODE
-	}
+        List<Key> result = new java.util.ArrayList<>();
+        inverted(root, result);
+        return result;
+    }
+    private void inverted(Node node, List<Key> result) {
+        if (node == null) return;
+        result.add(node.key);
+        inverted(node.right, result);
+        inverted(node.left, result);
+    }
 }

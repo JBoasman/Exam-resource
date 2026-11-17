@@ -1,3 +1,9 @@
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
+
 /**
  * IMPORTANT: This class is incomplete. Please look for "TODO" comments.
  * @author huy.pham
@@ -26,26 +32,70 @@ public class BST {
 		 * @return the node that has the given value.
 		 */
 	    public Node find(String s) {
-			// TODO: Add your implementation here.
-	        return this;
+			int cmp = s.compareTo(this.value);
+			if (cmp == 0) {
+				return this; //this node was a match
+			} else if (cmp < 0) {
+				if (this.left == null) {
+					return null;
+				} else {
+					return this.left.find(s);
+				}
+			} else {
+				if (this.right == null) {
+					return null;
+				} else {
+					return this.right.find(s);
+				}
+			}
 	    }
+
 
 		/**
 		 * Insert a new node into the tree
 		 * @param s
 		 * @return {@link Node}
 		 */
+		//Putting duplicates to the right of a node.
 		public Node insert(String s) {
-			// TODO: Add your implementation here.
-			return this;
+			int cmp = s.compareTo(this.value);
+			if (cmp < 0) {
+				if (this.left == null) {
+					this.left = new Node(s);
+					this.left.parent = this;
+					return this.left;
+				} else {
+					return this.left.insert(s);
+				}
+			} else {
+				if (this.right == null) {
+					this.right = new Node(s);
+					this.right.parent = this;
+					return this.right;
+				} else {
+					return this.right.insert(s);
+				}
+			}
 		}
 		
 		/**
 		 * @return pre-order traversal of the nodes that have odd number of children.
 		 */
 		public String printOddNodes() {
-			// TODO: Add your implementation here.
-			return "";
+
+            String output = new String();
+
+			if ((this.left != null) ^ (this.right != null)) {
+				output = (output + this.value + " ");
+			}
+			if (this.left != null) {
+				output = (output + this.left.printOddNodes());
+			}
+			if (this.right != null) {
+				output = (output + this.right.printOddNodes());
+			}
+
+			return output;
 		}
 	}
 

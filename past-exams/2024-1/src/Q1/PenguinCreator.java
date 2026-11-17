@@ -4,14 +4,11 @@ import java.util.Random;
 
 public class PenguinCreator extends AnimalCreator {
     private static final List<String> NAMES = List.of("Ace", "Alaska", "Aurora", "Bam-Bam", "Banjo");
-    private static int nextNameIndex = 0;
+    private int nextNameIndex = 0;
 
     public String getNextName() {
-        // TODO - Your code starts here
 
-
-        return null;  // feel free to change this line
-        // TODO - Your code ends here
+        return(NAMES.get(nextNameIndex++ % 5));
     }
 
     public String getRandomName() {
@@ -19,20 +16,12 @@ public class PenguinCreator extends AnimalCreator {
     }
 
     public PenguinCreator(Integer age, Integer level) {
-        // TODO - Your code starts here
-        super(null, null);  // feel free to change this line
-
-
-        // TODO - Your code ends here
+        super(age == null ? 1 : age, level == null ? 2 : level);
     }
 
     @Override
     public Animal createAnimal(String id, String name) {
-        // TODO - Your Code Starts Here
-
-        
-        return null;  // feel free to change this line
-        // TODO - Your Code Ends Here
+        return new Penguin(id, name, this.ageConfig, this.levelConfig);
     }
 
 }

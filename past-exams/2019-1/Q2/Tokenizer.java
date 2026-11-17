@@ -15,23 +15,13 @@ public class Tokenizer {
      */
     private Token next() {
         _buffer = _buffer.trim();
-        if (_buffer.isEmpty())
-            return null;
-        
-        if (_buffer.startsWith(Token.Type.LEFT.toString())) 
-            return new Token(Token.Type.LEFT);
-        
-        if (_buffer.startsWith(Token.Type.RIGHT.toString())) 
-            return new Token(Token.Type.RIGHT);
-        
-        // TODO: Implement "FORWARD" and "BACK" tokenization.
-        // hints:
-        // - Character.isDigit() may be useful in extracting the forward or back value from the buffer.
-        // - Use new Token(<type>, <original token str>, <value>) to return these tokens
-
-        // TODO: Implement "PENUP" and "PENDOWN" tokenization.
-
-        return null;
+        if (_buffer.isEmpty()) return null;
+        int end = _buffer.indexOf(';');
+        String command = (end < 0 ? _buffer : _buffer.substring(0, end)).trim();
+        String[] parts = command.split("[()\\s]+");
+        Token.Type type = Token.Type.valueOf(parts[0]);
+        Token token = parts.length == 1 ? new Token(type) : new Token(type, command, Integer.parseInt(parts[1]));
+        return token;
     }
 
     /**
@@ -39,16 +29,19 @@ public class Tokenizer {
      * @return the next token
      */
     public Token takeNext() {
-        // TODO: Add your implementation here.
-        return null;
+        Token token = next();
+        if (token != null) {
+            int end = _buffer.indexOf(';');
+            _buffer = end < 0 ? "" : _buffer.substring(end + 1);
+        }
+        return token;
     }
 
     /**
      * @return whether there is another token to parse in the buffer
      */
     public boolean hasNext() {
-        // TODO: Add your implementation here.
-        return false;
+        return next() != null;
     }
    
 }

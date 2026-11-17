@@ -25,8 +25,10 @@ public class RawState implements FoodState {
     @Override
     public void prepare(Food food) {
         // TODO - Start your code
-
-
+        food.elapsedPrepTime++;
+        if (food.elapsedPrepTime >= Ingredient.getPrepTime(food.ingredient)) {
+            food.setState(ReadyState.getState());
+        }
         // TODO - End your code
     }
 

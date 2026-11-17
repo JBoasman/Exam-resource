@@ -18,7 +18,7 @@ public class BurntState implements FoodState {
      */
     public void prepare(Food food) {
         // TODO - Start your code
-
+        throw new RuntimeException("Can not prepare burnt food");
 
         // TODO - End your code
     }

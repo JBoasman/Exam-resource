@@ -43,7 +43,31 @@ public class Q2Test {
 	public HashingBox hashingBox;
 
 
-	// TODO: ########## YOUR CODE STARTS HERE ##########
+	@Test(timeout = 1000)
+    public void validHashes() throws ComponentOutOfRangeException {
+        int[] primes = {2, 2, 3, 3, 5, 5, 7, 7, 7, 7, 11, 11, 13, 13, 13, 13, 17, 17, 19, 19, 19, 19, 23, 23, 23, 23, 23, 23, 29, 29, 31};
+        String[] names = {"", "a", "Z", "Comp2100", "1aaaa1aaaa", "abcdefZZ", "!aB2?_xyz", "1234567"};
+        int[] materials = {1018, 925, 999};
+        int[] shapes = {1, 2, 3, 4, 5};
+        for (int size = 1; size <= 31; size++)
+            for (Material material : Material.values())
+                for (Shape shape : Shape.values())
+                    for (String name : names) {
+                        int ascii = 0;
+                        for (int i = 0; i < Math.min(6, name.length()); i++) {
+                            char c = name.charAt(i);
+                            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) ascii += c;
+                        }
+                        int expected = ascii * primes[size - 1] + name.length() + materials[material.ordinal()] * shapes[shape.ordinal()];
+                        assertEquals(expected, hashingBox.hash(new Thing(material, size, shape, name)));
+                    }
+    }
+
+    @Test(timeout = 1000)
+    public void rejectsInvalidSizes() {
+        for (int size : new int[]{-1, 0, 32, Integer.MIN_VALUE, Integer.MAX_VALUE})
+            assertThrows(ComponentOutOfRangeException.class, () -> hashingBox.hash(new Thing(Material.STEEL, size, Shape.CIRCLE, "a")));
+    }
 	// TODO: You are encouraged to write multiple test methods for different scenarios.
 	// You do not need to write one test case per assertion, but some edge cases (e.g., when an Exception happens)
 	// may preferably be better

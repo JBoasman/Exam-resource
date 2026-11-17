@@ -18,17 +18,10 @@ public class Tokeniser {
      * @return the next token OR null when there is no more token or the next token is invalid.
      */
     public Token next() {
-        if (_buffer.isEmpty())
-            return null;
-
-        // TODO: Complete this method
-        // hints: you might want to use Character.isDigit(...) to check if a character is digit
-        // START YOUR CODE
-
-
-
-        // END YOUR CODE
-
+        if (_buffer.isEmpty()) return null;
+        char c = _buffer.charAt(0);
+        if (c >= '0' && c <= '9') return new Token(Token.Type.NUMBER, "" + c);
+        if (MATH_OPERATIONS.contains(c)) return new Token(Token.Type.MATH_OPERATION, "" + c);
         return null;
     }
 

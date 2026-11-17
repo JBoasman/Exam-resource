@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 public class GreenGrocery implements Grocery<Fruit> {
@@ -16,8 +17,11 @@ public class GreenGrocery implements Grocery<Fruit> {
 	public void restock(List<Fruit> fruits) {
 
 		//START YOUR CODE
-
-
+		for (Fruit f : fruits) {
+			if (!this.fruits.contains(f)) {
+				this.fruits.add(f);
+			}
+		}
 
 		//END YOUR CODE
 	}
@@ -41,12 +45,7 @@ public class GreenGrocery implements Grocery<Fruit> {
 		public boolean hasNext() {
 
 			// START YOUR CODE
-
-
-
-			//You are allowed to change this return value.
-			return false;
-
+			return index < this.grocery.getFruits().size();
 			// END YOUR CODE
 		}
 
@@ -54,12 +53,12 @@ public class GreenGrocery implements Grocery<Fruit> {
 		public Fruit next() {
 
 			// START YOUR CODE
-
-
+			if (this.hasNext()) {
+				return this.grocery.getFruits().get(index++);
+			}
 
 			//You are allowed to change this return value.
 			return null;
-
 			// END YOUR CODE
 		}
 	}

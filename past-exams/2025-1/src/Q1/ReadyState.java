@@ -29,7 +29,10 @@ public class ReadyState implements FoodState {
     @Override
     public void prepare(Food food) {
         // TODO - Start your code
-
+        food.elapsedPrepTime++;
+        if (food.elapsedPrepTime > Ingredient.getPrepTime(food.ingredient ) + 1) {
+            food.setState(BurntState.getState());
+        }
 
         // TODO - End your code
     }

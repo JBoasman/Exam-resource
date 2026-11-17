@@ -24,7 +24,8 @@ public class Food {
      */
     public void prepare() {
         // TODO - Start your code
-
+        this.checkState();
+        this.state.prepare(this);
 
         // TODO - End your code
     }
@@ -33,8 +34,14 @@ public class Food {
     /** check and update state if needed */
     public void checkState() {
         // TODO - Start your code
-
-
+        int t = Ingredient.getPrepTime(ingredient);
+        if (elapsedPrepTime < t) {
+            this.setState(RawState.getState());
+        } else if (elapsedPrepTime < t + 2) {
+            this.setState(ReadyState.getState());
+        } else {
+            this.setState(BurntState.getState());
+        }
         // TODO - End your code
     }
 

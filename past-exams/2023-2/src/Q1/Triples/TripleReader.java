@@ -22,10 +22,19 @@ public class TripleReader {
      * (it is just to specify that this method must NOT throw an exception).
      */
     public static Set<Triple> read(String filePath) {
-        // TODO - Your Code Starts Here (Q1a)
-
-        return null; // TODO You can change this statement
-        // TODO - Your Code Ends Here (Q1a)
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(filePath);
+            Set<Triple> result = new LinkedHashSet<>();
+            NodeList nodes = doc.getElementsByTagName("triple");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element e = (Element) nodes.item(i);
+                result.add(new Triple(
+                    new TripleComponent(TripleComponent.TripleComponentType.SUBJECT, e.getElementsByTagName("subject").item(0).getTextContent()),
+                    new TripleComponent(TripleComponent.TripleComponentType.PREDICATE, e.getElementsByTagName("predicate").item(0).getTextContent()),
+                    new TripleComponent(TripleComponent.TripleComponentType.OBJECT, e.getElementsByTagName("object").item(0).getTextContent())));
+            }
+            return result;
+        } catch (Exception e) { return null; }
     }
 
 

@@ -34,11 +34,17 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 * @return
 	 */
 	public Boolean testProp1() {
-		//START YOUR CODE
-		
-		return null;
-		
-		//END YOUR CODE
+		return (checkProp1(this.root));
+	}
+
+	public boolean checkProp1(Node<T> node) {
+		if (node == null) {
+			return true;
+		} else if (node.colour == Colour.VIOLET) {
+			return false;
+		} else {
+			return checkProp1(node.left) && checkProp1(node.right);
+		}
 	}
 
 	/**
@@ -48,11 +54,30 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 * @return
 	 */
 	public Boolean testProp2() {
-		//START YOUR CODE
-		
-		return null;
-		
-		//END YOUR CODE
+		if (this.root == null) {
+			return true;
+		}
+		if (this.root.colour != Colour.PINK) {
+			return false;
+		}
+		return (checkProp2(this.root));
+	}
+
+	public boolean checkProp2(Node<T> node) {
+		boolean l = true;
+		boolean r = true;
+		if (node.left == null && node.right == null) {
+			if (node.colour != Colour.PINK) {
+				return false;
+			}
+		}
+		if (node.left != null) {
+			l = checkProp2(node.left);
+		}
+		if (node.right != null) {
+			r = checkProp2(node.right);
+		}
+		return l && r;
 	}
 
 	/**
@@ -62,11 +87,26 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 * @return
 	 */
 	public Boolean testProp3() {
-		//START YOUR CODE
-		
-		return null;
-		
-		//END YOUR CODE
+		if (checkProp3(this.root) == -1) {
+			return false;
+		}
+		return true;
+	}
+
+	public int checkProp3(Node<T> node) {
+		if (node == null) {
+			return 0;
+		}
+		int l = checkProp3(node.left);
+		int r = checkProp3(node.right);
+		if (l == -1 || r == -1 || l != r) {
+			return -1;
+		}
+		if (node.colour == Colour.PINK) {
+			return 1 + l;
+		}
+		return l;
+
 	}
 
 	/**
@@ -77,10 +117,32 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 */
 	public Boolean testProp4() {
 		//START YOUR CODE
-		
-		return null;
-		
+		return checkProp4(this.root);
 		//END YOUR CODE
+	}
+
+	private boolean checkProp4(Node<T> node) {
+		if (node == null) {
+			return true;
+		}
+
+		if (node.colour == Colour.MAGENTA) {
+			// Neither child may be MAGENTA.
+			if ((node.left != null && node.left.colour == Colour.MAGENTA)
+					|| (node.right != null && node.right.colour == Colour.MAGENTA)) {
+				return false;
+			}
+
+			// At least one child must be PURPLE.
+			boolean leftPurple = node.left != null && node.left.colour == Colour.PURPLE;
+			boolean rightPurple = node.right != null && node.right.colour == Colour.PURPLE;
+			if (!leftPurple && !rightPurple) {
+				return false;
+			}
+		}
+
+		// Check the rule throughout both subtrees.
+		return checkProp4(node.left) && checkProp4(node.right);
 	}
 	
 	//HINT: testProp5() has been implemented.

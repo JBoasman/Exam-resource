@@ -53,7 +53,15 @@ public class Executor {
 			Document doc = db.newDocument();
 
 			// TODO
-			// ########## YOUR CODE STARTS HERE ##########
+			org.w3c.dom.Element root = doc.createElement(Person.KEY_ROOT);
+            doc.appendChild(root);
+            for (Person person : persons) {
+                org.w3c.dom.Element entry = doc.createElement(Person.KEY_ELEMENT); root.appendChild(entry);
+                if (person.getName() != null) { org.w3c.dom.Element child = doc.createElement(Person.KEY_NAME); child.setTextContent(String.valueOf(person.getName())); entry.appendChild(child); }
+                if (person.getGender() != null) { org.w3c.dom.Element child = doc.createElement(Person.KEY_GENDER); child.setTextContent(String.valueOf(person.getGender())); entry.appendChild(child); }
+                if (true) { org.w3c.dom.Element child = doc.createElement(Person.KEY_AGE); child.setTextContent(String.valueOf(person.getAge())); entry.appendChild(child); }
+                if (person.getOccupation() != null) { org.w3c.dom.Element child = doc.createElement(Person.KEY_OCCUPATION); child.setTextContent(String.valueOf(person.getOccupation())); entry.appendChild(child); }
+            }
 
 			// ########## YOUR CODE ENDS HERE ##########
 
@@ -98,7 +106,16 @@ public class Executor {
 			doc.getDocumentElement().normalize();
 
 			// TODO
-			// ########## YOUR CODE STARTS HERE ##########
+			org.w3c.dom.NodeList entries = doc.getElementsByTagName(Person.KEY_ELEMENT);
+            for (int i = 0; i < entries.getLength(); i++) {
+                org.w3c.dom.Element entry = (org.w3c.dom.Element) entries.item(i);
+                Person person = new Person();
+                if (entry.getElementsByTagName(Person.KEY_NAME).getLength() > 0) person.setName(entry.getElementsByTagName(Person.KEY_NAME).item(0).getTextContent());
+                if (entry.getElementsByTagName(Person.KEY_GENDER).getLength() > 0) person.setGender(entry.getElementsByTagName(Person.KEY_GENDER).item(0).getTextContent());
+                if (entry.getElementsByTagName(Person.KEY_AGE).getLength() > 0) person.setAge(Integer.parseInt(entry.getElementsByTagName(Person.KEY_AGE).item(0).getTextContent()));
+                if (entry.getElementsByTagName(Person.KEY_OCCUPATION).getLength() > 0) person.setOccupation(entry.getElementsByTagName(Person.KEY_OCCUPATION).item(0).getTextContent());
+                persons.add(person);
+            }
 
 			// ########## YOUR CODE ENDS HERE ##########
 

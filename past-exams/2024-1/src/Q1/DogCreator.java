@@ -11,11 +11,7 @@ public class DogCreator extends AnimalCreator {
      *  Hint: you may use `nextNameIndex`
      */
     public String getNextName() {
-        // TODO - Your code starts here
-
-
-        return null;  // feel free to change this line
-        // TODO - Your code ends here
+        return(NAMES.get(nextNameIndex++ % 4));
     }
 
     public String getRandomName() {
@@ -23,20 +19,12 @@ public class DogCreator extends AnimalCreator {
     }
 
     public DogCreator(Integer age, Integer level) {
-        // TODO - Your code starts here
-        super(null, null);  // feel free to change this line
-
-
-        // TODO - Your code ends here
+        super(age, level);
     }
 
     @Override
     public Animal createAnimal(String id, String name) {
-        // TODO - Your Code Starts Here
-
-
-        return null;  // feel free to change this line
-        // TODO - Your Code Ends Here
+        return new Dog(id, name, this.ageConfig, this.levelConfig);
     }
 
 }

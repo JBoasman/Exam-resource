@@ -17,60 +17,28 @@ public class XMLProcessor {
 	private static final String STATE_ROOT_ELEMENT = "States";
 
 	public static List<List<String>> read(String fileName) {
-		File f = new File(fileName);
-		if (!f.exists()) {
-			return Collections.emptyList();
-		}
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
-		try {
-			db = dbf.newDocumentBuilder();
-			Document doc = db.parse(f);
-
-			doc.getDocumentElement().normalize();
-
-			// TODO
-			// ########## YOUR CODE STARTS HERE ##########
-			// HINT: You can use getChildNodes() function in the XML library to obtain a
-			// list of child nodes of the parent tag STATE_ROOT_ELEMENT.
-
-			// ########## YOUR CODE ENDS HERE ##########
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return Collections.emptyList();
-	}
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File(fileName));
+            List<String> keys = new java.util.ArrayList<>(), states = new java.util.ArrayList<>();
+            org.w3c.dom.NodeList children = doc.getDocumentElement().getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                org.w3c.dom.Node child = children.item(i);
+                if (child instanceof org.w3c.dom.Element) { keys.add(child.getNodeName()); states.add(child.getTextContent()); }
+            }
+            return java.util.Arrays.asList(keys, states);
+        } catch (Exception e) { throw new IllegalStateException("Cannot read states", e); }
+    }
 
 	public static void write(String fileName, List<String> keys, List<String> states) {
-		File f = new File(fileName);
-		if (f.exists()) {
-			f.delete();
-		}
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		try {
-
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.newDocument();
-
-			// TODO
-			// ########## YOUR CODE STARTS HERE ##########
-
-			// ########## YOUR CODE ENDS HERE ##########
-
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-
-			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(f);
-			transformer.transform(source, result);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        if (keys.size() != states.size()) throw new IllegalArgumentException("Mismatched lists");
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            org.w3c.dom.Element root = doc.createElement(STATE_ROOT_ELEMENT); doc.appendChild(root);
+            for (int i = 0; i < keys.size(); i++) {
+                org.w3c.dom.Element child = doc.createElement(keys.get(i));
+                child.setTextContent(states.get(i)); root.appendChild(child);
+            }
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc), new StreamResult(new File(fileName)));
+        } catch (Exception e) { throw new IllegalStateException("Cannot save states", e); }
+    }
 }

@@ -20,23 +20,23 @@ public class MyTokenizer implements Tokenizer {
      *  save the token to {@code currentToken}.
      */
     public void next() {
-
-
-        buffer = buffer.trim(); // remove whitespace
-
-         if(buffer.isEmpty()) {
-            currentToken = null;	// if there's no string left, set currentToken null and return
-            return;
-         }
-
-        // ########## YOUR CODE STARTS HERE ##########
-
-       
-        // ########## YOUR CODE ENDS HERE ##########
-        
-        // Remove the extracted token from buffer
-        int tokenLen = currentToken.getValue().length();
-        buffer = buffer.substring(tokenLen);
+        buffer = buffer.trim();
+        if (buffer.isEmpty()) { currentToken = null; return; }
+        int end = 1;
+        char first = buffer.charAt(0);
+        Token.Type type;
+        if (Character.isLetter(first)) {
+            while (end < buffer.length() && Character.isLetter(buffer.charAt(end))) end++;
+            String word = buffer.substring(0, end);
+            if (word.equals(word.toUpperCase(java.util.Locale.ROOT))) type = Token.Type.UPPER_CASE_WORD;
+            else if (word.equals(word.toLowerCase(java.util.Locale.ROOT))) type = Token.Type.LOWER_CASE_WORD;
+            else type = end <= 3 ? Token.Type.SHORT_CAMEL_CASE_WORD : Token.Type.LONG_CAMEL_CASE_WORD;
+        } else if (Character.isDigit(first)) {
+            while (end < buffer.length() && Character.isDigit(buffer.charAt(end))) end++;
+            type = Token.Type.INTEGER_NUMBER;
+        } else type = Token.Type.NON_ALPHANUMERIC;
+        currentToken = new Token(buffer.substring(0, end), type);
+        buffer = buffer.substring(end);
     }
 
     /**

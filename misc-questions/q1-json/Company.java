@@ -1,3 +1,8 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.io.File;
 import java.util.List;
 
@@ -30,15 +35,10 @@ public class Company {
 	 * @return
 	 */
 	public static Company loadFromJsonFile(File file) {
-
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-
-		return null;
-	}
+        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+            return new Gson().fromJson(reader, Company.class);
+        } catch (IOException e) { throw new UncheckedIOException(e); }
+    }
 
 	/**
 	 * Implement this method to merge the skills of the employees with the same
@@ -46,13 +46,15 @@ public class Company {
 	 * data after merging.
 	 */
 	public void mergeEmployees() {
-
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-	}
+        Map<String, LinkedHashSet<String>> merged = new LinkedHashMap<>();
+        for (Employee entry : employees) {
+            merged.computeIfAbsent(entry.getName(), k -> new LinkedHashSet<>()).addAll(entry.getSkills());
+        }
+        employees = new ArrayList<>();
+        for (var entry : merged.entrySet()) {
+            employees.add(new Employee(entry.getKey(), new ArrayList<>(entry.getValue())));
+        }
+    }
 
 	/**
 	 * Implement this method to save this company object into a JSON file
@@ -60,13 +62,10 @@ public class Company {
 	 * @param file
 	 */
 	public void saveToJsonFile(File file) {
-
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-	}
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+            new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
+        } catch (IOException e) { throw new UncheckedIOException(e); }
+    }
 
 	public String getName() {
 		return name;

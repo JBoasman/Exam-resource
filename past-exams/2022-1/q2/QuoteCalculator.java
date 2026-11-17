@@ -1,15 +1,7 @@
 public class QuoteCalculator {
 
 	public static Quote bestQuote(Parcel parcel, ExpressCompany a, ExpressCompany b) throws IllegalParcelItemException {
-
-		Quote quote = null;
-
-		// TODO
-		// ########## YOUR CODE STARTS HERE ##########
-
-		// ########## YOUR CODE ENDS HERE ##########
-
-		return quote;
-
-	}
+        double qa = a.handle(parcel), qb = b.handle(parcel);
+        return qa <= qb ? new Quote(a, qa) : new Quote(b, qb);
+    }
 }

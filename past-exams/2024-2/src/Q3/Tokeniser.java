@@ -24,12 +24,19 @@ public class Tokeniser {
      * Notes: The tokenisation process should be case-sensitive on the token strings.
      */
     public GitToken next() {
-        // Please feel free to change or remove any code provided within your coding area.
-        // TODO - Your code starts here
-
-
-        return new GitToken(null);
-        // TODO - Your code ends here
+        buffer = buffer.stripLeading();
+        currentToken = null;
+        if (buffer.isEmpty()) return null;
+        int end = 0;
+        if (buffer.charAt(0) == ';') end = 1;
+        else while (end < buffer.length() && buffer.charAt(end) != ' ' && buffer.charAt(end) != ';') end++;
+        String word = buffer.substring(0, end);
+        if (word.startsWith(".")) currentToken = new GitToken(GitTokenType.PATH, word);
+        else {
+            for (GitTokenType type : GitTokenType.values()) if (type != GitTokenType.PATH && type.getStr().equals(word)) currentToken = new GitToken(type);
+        }
+        if (currentToken != null) buffer = buffer.substring(end);
+        return currentToken;
     }
 
     public boolean hasNext() {

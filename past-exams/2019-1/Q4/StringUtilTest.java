@@ -6,13 +6,11 @@ class StringUtilTest {
 
 	@Test
 	void test() {
-		//TODO: Write a minimum set of test cases that are branch complete 
-		// to test StringUtil.collapseNewlines method via assertEquals for test cases.
-		// 
-		// All test cases should be included in this method. Do not create another method. 
-		// Auto grader will not check the other methods created individually
-		
-
+		//Failing first branch
+		String failFirstBranch = "J";
+		assertEquals("J", StringUtil.collapseNewlines(failFirstBranch));
+		String noNewLine = "Apple\n\nApple\nApple";
+		assertEquals("Apple\nApple\nApple", StringUtil.collapseNewlines(noNewLine));
+		//Due to the way the method works,this will explore every different part of each branch? So this is full branch coverrage?
 	}
-
 }

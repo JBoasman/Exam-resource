@@ -4,6 +4,7 @@ import org.junit.Test;
 import exceptions.NullCharacterException;
 import exceptions.NullKeyEventException;
 
+
 public class ExceptionTest {
 
 	private Character character;
@@ -18,6 +19,7 @@ public class ExceptionTest {
 		// TODO
 		// START YOUR CODE
 
+		character.getState().handle(character, null);
 		// END YOUR CODE
 	}
 
@@ -25,7 +27,7 @@ public class ExceptionTest {
 	public void testNullCharacterException() {
 		// TODO
 		// START YOUR CODE
-
+		character.getState().handle(null, Key.UP);
 		// END YOUR CODE
 	}
 }

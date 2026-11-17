@@ -14,25 +14,23 @@ public class DecisionNode extends Node {
 
     @Override
     public String classify(Spider spider) {
-        // TODO - Your Code Starts Here (Q2a)
-        // TODO - Note: you may implement this function and/or classify in the superclass
-
-        return null; // TODO replace this line
-        // TODO - Your Code END Here
+        return (spider.testProperty(testsFor) ? yesOutcome : noOutcome).classify(spider);
     }
 
 
     @Override
     public String toString() {
-        // TODO - Your Code Starts Here (Q2b)
-        // You may create helper functions in any of the Node classes
-        // You may wish to use the method Spider.propertyToString
-
-        return null; // TODO replace this line
-        // TODO - Your Code END Here
+        return describe(this, "").stripTrailing();
     }
 
 
 
 
+    private static String describe(Node node, String indent) {
+        if (node instanceof TerminalNode terminal) return terminal.outcome + "\n";
+        DecisionNode decision = (DecisionNode) node;
+        return Spider.propertyToString(decision.testsFor) + "?\n"
+            + indent + "| Yes: " + describe(decision.yesOutcome, indent + "| ")
+            + indent + "| No: " + describe(decision.noOutcome, indent + "| ");
+    }
 }

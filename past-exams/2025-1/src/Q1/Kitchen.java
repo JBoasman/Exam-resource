@@ -19,10 +19,20 @@ public class Kitchen {
      */
     public static boolean readyToCook(Recipe recipe, Set<Food> ava) {
         // TODO - Start your code
-
-
-        return false;
-        // TODO - End your code
+        for (Ingredient i : recipe.ingredients.keySet()) {
+            int needed = recipe.ingredients.get(i);
+            for (Food f : ava) {
+                if (f.ingredient == i) {
+                    if (!(f.state instanceof BurntState)) {
+                        needed--;
+                    }
+                }
+            }
+            if (needed > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -34,9 +44,20 @@ public class Kitchen {
      */
     public static boolean readyToServe(Recipe recipe, Set<Food> ava) {
         // TODO - Start your code
-
-
-        return false;
+        for (Ingredient i : recipe.ingredients.keySet()) {
+            int needed = recipe.ingredients.get(i);
+            for (Food f : ava) {
+                if (f.ingredient == i) {
+                    if ((f.state instanceof ReadyState)) {
+                        needed--;
+                    }
+                }
+            }
+            if (needed > 0) {
+                return false;
+            }
+        }
+        return true;
         // TODO - End your code
     }
 
@@ -56,9 +77,26 @@ public class Kitchen {
      */
     public Map<Ingredient, Integer> ingredientsRequired() {
         // TODO - Start your code
+        Map<Ingredient, Integer> toGet = new HashMap<>();
+        // Total the ingredients needed across all orders.
+        for (Recipe recipe : orders) {
+            for (Ingredient i : recipe.ingredients.keySet()) {
+                toGet.put(i, toGet.getOrDefault(i, 0) + recipe.ingredients.get(i));
+            }
+        }
 
+        // Subtract each usable stock entry once.
+        for (Food f : availableFood.keySet()) {
+            Ingredient i = f.getIngredient();
+            if (!(f.state instanceof BurntState) && toGet.containsKey(i)) {
+                toGet.put(i, toGet.get(i) - availableFood.get(f));
+            }
+        }
 
-        return null;
+        // Keep only ingredients that are still needed.
+        toGet.entrySet().removeIf(entry -> entry.getValue() <= 0);
+        return toGet;
+
         // TODO - End your code
     }
 

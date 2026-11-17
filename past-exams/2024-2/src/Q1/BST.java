@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Stack;
 
 class BST<T extends Comparable<T>> implements IterableCollection<T> {
@@ -77,11 +78,9 @@ class BST<T extends Comparable<T>> implements IterableCollection<T> {
          * @param root the root of the BST to iterate over
          */
         public BSTIterator(BST<T> root) {
-            // TODO - Start your code here
-
-
-
-            // TODO - End your code here
+            if (root != null && root.value != null) {
+                stack.push(root);
+            }
         }
 
         /**
@@ -89,11 +88,7 @@ class BST<T extends Comparable<T>> implements IterableCollection<T> {
          */
         @Override
         public boolean hasNext() {
-            // TODO - Start your code here
-
-
-            return false; // Feel free to remove this line
-            // TODO - End your code here
+            return (!stack.isEmpty());
         }
 
         /**
@@ -112,13 +107,18 @@ class BST<T extends Comparable<T>> implements IterableCollection<T> {
          */
         @Override
         public T next() {
-            // TODO - Start your code here
-
-
-            return null; // Feel free to remove this line
-            // TODO - End your code here
+            if (!this.hasNext()) {
+                throw new NoSuchElementException();
+            }
+            BST<T> nxt = stack.pop();
+            if (nxt.right != null) {
+                stack.push(nxt.right);
+            }
+            if (nxt.left != null) {
+                stack.push(nxt.left);
+            }
+            return nxt.value;
         }
-
         public int size() {
             return this.stack.size();
         }

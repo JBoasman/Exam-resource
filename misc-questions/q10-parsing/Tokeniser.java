@@ -16,18 +16,10 @@ public class Tokeniser {
      * @return {@link Token}
      */
     private Token getTokenAt(int index) {
-        if (_buffer.isEmpty())
-            return null;
-
-        // TODO: Complete this method
-        // hints: you might want to use Character.isDigit(...) to check if a character is digit;
-        // then use Integer.parseInt(...) to parse it from string to a number.
-        // START YOUR CODE
-
-
-
-        // END YOUR CODE
-        return null;
+        if (index < 0 || index >= _buffer.length()) return null;
+        char c = _buffer.charAt(index);
+        if (c < '0' || c > '9') return null;
+        return new Token((c - '0') % 2 == 0 ? Token.Type.EVEN_NUMBER : Token.Type.ODD_NUMBER, "" + c);
     }
 
     /**

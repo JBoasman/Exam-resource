@@ -6,8 +6,17 @@ public abstract class AnimalCreator {
 
     public AnimalCreator(Integer age, Integer level) {
         // TODO - Your code starts here
-
-
+        if (age == null) {
+            age = ageConfig;
+        }
+        if (level == null) {
+            level = levelConfig;
+        }
+        if (age < 0 || level < 0) {
+            throw new IllegalArgumentException("Age/Level can not be negative");
+        }
+        ageConfig = age;
+        levelConfig = level;
         // TODO - Your code ends here
     }
 
@@ -28,10 +37,9 @@ public abstract class AnimalCreator {
      */
     public Animal createAnimalTemplate() {
         // TODO - Your code starts here
-
-
-        return null; // feel free to change this line
-        // TODO - Your code ends here
+        String id = UUID.randomUUID().toString();
+        String name = this.getNextName();
+        return createAnimal(id, name);
     }
 
     /**
@@ -39,11 +47,14 @@ public abstract class AnimalCreator {
      * @param number: number of animals to be created.
      */
     public List<Animal> createBatch(int number) {
-        // TODO - Your code starts here
 
+        List<Animal> batch = new ArrayList<>();
+        while (number > 0) {
+            batch.add(this.createAnimalTemplate());
+            number--;
+        }
+        return batch; // feel free to change this line
 
-        return null; // feel free to change this line
-        // TODO - Your code ends here
     }
 
 }

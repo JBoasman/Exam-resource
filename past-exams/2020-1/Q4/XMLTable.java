@@ -1,9 +1,13 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -12,6 +16,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * IMPORTANT: This class is incomplete. Please look for "TODO" comments.
@@ -105,23 +111,26 @@ public class XMLTable {
 	 * Get all records from the XML file
 	 */
 	public List<Customer> load(String tableName) {
-
-		List<Customer> customers = new ArrayList<>();
-
-		File f = new File(FileUtil.getTableFileName(tableName));
-		if (!f.exists()) {
-			return customers;
-		}
-
-		// TODO: Complete this method
-		// START YOUR CODE
-
-		
-
-		// END YOUR CODE
-
-		return customers;
-	}
+        List<Customer> customers = new ArrayList<>();
+        File file = new File(FileUtil.getTableFileName(tableName));
+        if (!file.exists()) return customers;
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+            NodeList nodes = doc.getElementsByTagName(Customer.KEY_ELEMENT);
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element e = (Element) nodes.item(i);
+                Customer c = new Customer();
+                c.setId(Integer.parseInt(e.getElementsByTagName(Customer.KEY_ID).item(0).getTextContent()));
+                if (e.getElementsByTagName(Customer.KEY_NAME).getLength() > 0) c.setName(e.getElementsByTagName(Customer.KEY_NAME).item(0).getTextContent());
+                if (e.getElementsByTagName(Customer.KEY_ADDRESS).getLength() > 0) c.setAddress(e.getElementsByTagName(Customer.KEY_ADDRESS).item(0).getTextContent());
+                if (e.getElementsByTagName(Customer.KEY_CITY).getLength() > 0) c.setCity(e.getElementsByTagName(Customer.KEY_CITY).item(0).getTextContent());
+                if (e.getElementsByTagName(Customer.KEY_POSTCODE).getLength() > 0) c.setPostCode(e.getElementsByTagName(Customer.KEY_POSTCODE).item(0).getTextContent());
+                if (e.getElementsByTagName(Customer.KEY_COUNTRY).getLength() > 0) c.setCountry(e.getElementsByTagName(Customer.KEY_COUNTRY).item(0).getTextContent());
+                customers.add(c);
+            }
+            return customers;
+        } catch (Exception e) { throw new IllegalStateException("Cannot read table", e); }
+    }
 
 	/**
 	 * Insert a new customer to XML files. 
@@ -129,14 +138,8 @@ public class XMLTable {
 	 *
 	 */
 	public void insert(String tableName, Customer customer) {
-		
-		// TODO: Complete this method
-		// START YOU CODE
-		// HINT: insert the given customer to the XML file.
-		// You can call the load() and save() methods
-		
-
-		
-		// END YOUR CODE
-	}
+        List<Customer> customers = load(tableName);
+        customers.add(customer);
+        save(tableName, customers);
+    }
 }

@@ -2,6 +2,7 @@ package Q2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class ListElementsTree {
     Node root;
@@ -15,12 +16,31 @@ public class ListElementsTree {
     }
 
     public List<String> preOrderWalk() {
-        // TODO - Your Code Starts Here
 
+        List<String> list = new ArrayList<>();
 
-        return null;      // You may make changes to this line
-        // TODO - Your Code Ends Here
+        Stack<Node> stack = new Stack<>();
+        if (this.root == null) {
+            return list;
+        }
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            Node current = stack.pop();
+            if (current != this.root) {
+                list.add(current.value);
+            }
+            List<Node> children = current.getChildren();
+            int index = children.size() - 1;
+            while (index >= 0) {
+                stack.push(children.get(index)); //index of list retrieval
+                index--;
+            }
+        }
+
+        return list;
     }
+
 
 
 

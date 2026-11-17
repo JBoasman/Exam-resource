@@ -11,17 +11,15 @@ public class FamilyTree extends Tree {
      * Task A
      */
     public FamilyTree(Person value) {
-        // TODO - Start your code
-
-        // TODO - End your code
+        this.root = value;
+        this.left = new EmptyTree();
+        this.right = new EmptyTree();
     }
 
     public FamilyTree(Person value, Tree left, Tree right) {
-        // TODO - Start your code
-
-
-        // TODO - End your code
-
+        this.root = value;
+        this.left = left;
+        this.right = right;
     }
 
 
@@ -30,25 +28,64 @@ public class FamilyTree extends Tree {
      */
     public Tree find(int id) {
         // TODO - Start your code
+        if (this.root == null) {
+            return null;
+        }
+        Tree current = this;
 
-
+        while (current.root != null) {
+            if (id == current.root.getId()) {
+                return current;
+            } else if (id < current.root.getId()) {
+                current = current.right;
+            } else {
+                current = current.left;
+            }
+        }
         return null;
+
         // TODO - End your code
     }
 
     public boolean isOrdered() {
         // TODO - Start your code
-
-
-        return false;
+        if (this.root == null) {
+            return true;
+        }
+        return orderedHelper(Long.MAX_VALUE, Long.MIN_VALUE, this);
         // TODO - End your code
     }
 
+    public boolean orderedHelper(long max, long min, Tree tree) {
+        if (tree.root == null) {
+            return true;
+        }
+        int current = tree.root.getId();
+        if (current > max || current <= min) {
+            return false;
+        } else {
+            return orderedHelper(current, min, tree.right) && orderedHelper(max, current, tree.left);
+        }
+    }
+
     public void insert(int newId) {
-        // TODO - Start your code
-
-
-        // TODO - End your code
+        Person toInsert = new Person(newId);
+        //Can we assume never handed an EmptyTree because this
+        // method acts on a FamilyTree?
+        int current = this.root.getId();
+        if (newId <= current) {
+            if (this.right.root == null) {
+                this.right = new FamilyTree(toInsert);
+            } else {
+                this.right.insert(newId);
+            }
+        } else {
+            if (this.left.root == null) {
+                this.left = new FamilyTree(toInsert);
+            } else {
+                this.left.insert(newId);
+            }
+        }
     }
 
 
@@ -67,8 +104,25 @@ public class FamilyTree extends Tree {
      */
     public int getLevelAndLabel() {
         // TODO - Start your code
-
-        return -1;
+        int level = 1 + Math.max(
+                this.left.getLevelAndLabel(),
+                this.right.getLevelAndLabel()
+        );
+        switch (level) {
+            case 1:
+                this.root.setLabel("Kid");
+                break;
+            case 2:
+                this.root.setLabel("Parent");
+                break;
+            case 3:
+                this.root.setLabel("Grandparent");
+                break;
+            default:
+                this.root.setLabel("Great-".repeat(level - 3) + "Grandparent");
+                break;
+        }
+        return level;
         // TODO - End your code
     }
 
@@ -79,16 +133,30 @@ public class FamilyTree extends Tree {
     @Override
     public String show() {
         // TODO - Start your code
-
-        return null;
+        return show(0);
         // TODO - End your code
     }
 
     @Override
     public String show(int depth) {
         // TODO - Start your code
+        String prefix;
+        if (depth == 0) {
+            prefix = "";
+        } else {
+            prefix = "  " + "-".repeat(4 * depth - 2);
+        }
+        StringBuilder output = new StringBuilder();
+        output.append(prefix).append(this.root).append('\n');
 
-        return null;
+        // EmptyTree.show() may return null, so only visit real subtrees.
+        if (this.left.root != null) {
+            output.append(this.left.show(depth + 1));
+        }
+        if (this.right.root != null) {
+            output.append(this.right.show(depth + 1));
+        }
+        return output.toString();
         // TODO - End your code
     }
 

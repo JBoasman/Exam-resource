@@ -1,57 +1,18 @@
 package Q1;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Participant {
     private ParticipantState state;
-    private Riddle[] riddleList;
-
-    //You may use this part to implement other required instructions
-    //TODO - Your Code Starts here
-
-
-
-    //TODO - Your Code Ends here
-
-
-    public Participant(Riddle[] riddleList) {
-        //TODO - Your Code Starts here
-
-
-
-        //TODO - Your Code Ends here
-    }
-
-    public void askForHelp() {
-        // this.state = new HelpState();  // Uncomment this line for part 2a. You should not change the code content of this line
-
-        //TODO - Your Code Starts here
-
-
-
-        //TODO - Your Code Ends here
-    }
-
-
-
+    private final Riddle[] riddleList;
+    private final List<Observer> observers = new ArrayList<>();
+    public Participant(Riddle[] riddleList) { this.riddleList = riddleList; state = new InProgressState(); }
+    public void registerObserver(Observer observer) { if (!observers.contains(observer)) observers.add(observer); }
+    public void askForHelp() { state = new HelpState(); for (Observer observer : observers) observer.updateHelp(this); }
     public void solveRiddle(String input, int whichRiddle) throws RiddleException {
-        this.state = this.state.solveRiddle(input, riddleList, whichRiddle);
-
-        // TODO  - Your Code Starts here
-
-
-
-        //TODO - Your Code Ends here
+        state = state.solveRiddle(input, riddleList, whichRiddle);
+        if (state instanceof EscapedState) for (Observer observer : observers) observer.updateEscape(this);
     }
-
-
-
-    public ParticipantState getState() {
-        return state;
-    }
-
-    public Riddle getRiddle(int whichRiddle) {
-        return riddleList[whichRiddle];
-    }
-
-
-
+    public ParticipantState getState() { return state; }
+    public Riddle getRiddle(int whichRiddle) { return riddleList[whichRiddle]; }
 }

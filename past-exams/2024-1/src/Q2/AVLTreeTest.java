@@ -60,11 +60,9 @@ public class AVLTreeTest {
      */
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        // TODO - Start your code here
-
-
-        return null;  // Feel free to change this line of code.
-        // TODO - End your code here
+        // LL, RR, LR, RL: three nodes are the smallest rotation-triggering trees.
+        return List.of(new Object[]{0, List.of(2, 1, 3)}, new Object[]{1, List.of(2, 1, 3)},
+            new Object[]{2, List.of(2, 1, 3)}, new Object[]{3, List.of(2, 1, 3)});
     }
 
 
@@ -85,11 +83,11 @@ public class AVLTreeTest {
      * @return The constructed AVLTree.
      */
     private AVLTree createTree(int treeIdentifier) {
-        // TODO - Start your code here
-
-
-        return createTreeNode(2100);  // Feel free to change or remove this line of code.
-        // TODO - End your code here
+        int[][] inputs = {{3, 2, 1}, {1, 2, 3}, {3, 1, 2}, {1, 3, 2}};
+        int[] values = inputs[treeIdentifier];
+        AVLTree tree = createTreeNode(values[0]);
+        tree = tree.insert(values[1]);
+        return tree.insert(values[2]);
     }
 
 

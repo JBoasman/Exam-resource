@@ -41,15 +41,17 @@ public class CalculatePriceTest {
      */
     @Parameterized.Parameters(name = "{index}: isValid({0}) = {1}")
     public static Collection<Object[]> data() {
-        // TODO - Start your code here
-
-        return Arrays.asList(new Object[][]{
-                //  Add your test cases here, e.g.
-                // {new Pricing(3, 1, "id1"), 10},
-
+        // Three short-circuit paths through the missing-member condition;
+        // quantity=4; member discount; and both bulk-discount outcomes.
+        return Arrays.asList(new Object[][] {
+            {new Pricing(3, null, null), 12},
+            {new Pricing(3, null, "  "), 12},
+            {new Pricing(3, null, "id1"), 12},
+            {new Pricing(3, 4, "other"), 12},
+            {new Pricing(3, 5, "id1"), 10},
+            {new Pricing(2, 5, "id1"), 10},
+            {new Pricing(3, 6, "other"), 15}
         });
-
-        // TODO - End your code here
     }
 
     public Integer callCalculatePrice(Pricing pricing) {

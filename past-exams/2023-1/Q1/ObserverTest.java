@@ -21,8 +21,8 @@ public class ObserverTest {
         participant = new Participant(riddles);
 
         // TODO - Uncomment this for part 2b
-//        observer = new GameMaster();
-//        participant.registerObserver(observer);
+        observer = new GameMaster();
+        participant.registerObserver(observer);
     }
 
     @Test(timeout=1000)

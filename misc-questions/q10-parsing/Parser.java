@@ -18,18 +18,23 @@ public class Parser {
 	 * @return True if the given tokens conform with the grammar. False, otherwise.
 	 */
 	public boolean parseExp() {
-		if (!_tokeniser.isNextOrLastValid()) return false;
-		if (!_tokeniser.hasNext()) {
-			return true;
-		}
-
-        // TODO: Complete this method
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-		return false;
-	}
+        // X := odd | Y X; Y := even | X Y. Chart parsing avoids left recursion.
+        java.util.List<Token.Type> tokens = new java.util.ArrayList<>();
+        while (_tokeniser.hasNext()) tokens.add(_tokeniser.takeNext().type);
+        if (!_tokeniser.isNextOrLastValid() || tokens.isEmpty()) return false;
+        int n = tokens.size();
+        boolean[][] x = new boolean[n][n + 1], y = new boolean[n][n + 1];
+        for (int i = 0; i < n; i++) {
+            x[i][i + 1] = tokens.get(i) == Token.Type.ODD_NUMBER;
+            y[i][i + 1] = tokens.get(i) == Token.Type.EVEN_NUMBER;
+        }
+        for (int len = 2; len <= n; len++)
+            for (int i = 0; i + len <= n; i++)
+                for (int k = i + 1; k < i + len; k++) {
+                    x[i][i + len] |= y[i][k] && x[k][i + len];
+                    y[i][i + len] |= x[i][k] && y[k][i + len];
+                }
+        return x[0][n] || y[0][n];
+    }
 
 }

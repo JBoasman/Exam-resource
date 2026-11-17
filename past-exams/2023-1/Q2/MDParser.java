@@ -9,11 +9,17 @@ public class MDParser {
     }
 
     public ListElementsTree parse() {
-        // TODO - Your Code Starts Here
-
-
-        return null;      // You may make changes to this line
-        // TODO - Your Code Ends Here
+        ListElementsTree tree = new ListElementsTree();
+        java.util.List<ListElementsTree.Node> parents = new java.util.ArrayList<>();
+        parents.add(tree.root);
+        while (tokenizer.hasNext()) {
+            MDToken token = tokenizer.next();
+            int level = token.getLevel();
+            while (parents.size() > level) parents.remove(parents.size() - 1);
+            ListElementsTree.Node child = parents.get(level - 1).insert(token.getContent());
+            parents.add(child);
+        }
+        return tree;
     }
 
 

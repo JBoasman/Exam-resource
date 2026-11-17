@@ -15,11 +15,38 @@ public class BST {
 	 * @return The results which follows the rules specified in the given question sheet
 	 */
 	public String DNAGenerator(Integer key) {
-		// START YOUR CODE
-		
-		return null;// You are allowed to remove or change this default return value
-		// END YOUR CODE
+		Node node = find(root, key);
+
+		// The requested key does not exist.
+		if (node == null) {
+			return "CGTA";
+		}
+
+		// Create one builder for the entire traversal.
+		StringBuilder output = new StringBuilder();
+		printDNA(node, output);
+
+		// No qualifying nodes means null; otherwise return the built string.
+		return output.length() == 0 ? null : output.toString();
 	}
+
+	private void printDNA(Node node, StringBuilder output) {
+		// An absent subtree contributes nothing.
+		if (node == null) {
+			return;
+		}
+
+		// XOR is true when exactly one child exists.
+		if ((node.left != null) ^ (node.right != null)) {
+			output.append(node.value);
+		}
+
+		// Both calls append to the SAME builder.
+		// This question allows any traversal order.
+		printDNA(node.left, output);
+		printDNA(node.right, output);
+	}
+
 
 	/**
 	 * Search for a node containing a given key

@@ -35,19 +35,13 @@ public class Tokeniser {
 	 *         is invalid.
 	 */
 	public Token next() {
-		if (_buffer.isEmpty())
-			return null;
-
-		// TODO: Complete this method
-		// START YOUR CODE
-
-	
-		
-		// You are allowed to remove the following 'return null' if necessary
-		return null;
-		
-		// END YOUR CODE
-	}
+        _buffer = _buffer.trim();
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("^(INSERT INTO\\s+\\w+\\s*|VALUES\\s*)\\([^()]*\\)").matcher(_buffer);
+        if (!m.find()) return null;
+        String original = m.group();
+        boolean insert = original.startsWith("INSERT INTO");
+        return new Token(insert ? Token.Type.INSERT_INTO : Token.Type.VALUES, original.substring(insert ? 11 : 6).trim(), original);
+    }
 
 	/**
 	 * Return the next token and remove it from the buffer

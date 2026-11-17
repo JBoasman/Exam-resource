@@ -18,18 +18,12 @@ public class Parser {
 	 * @return True if the given tokens conform with the grammar. False, otherwise.
 	 */
 	public boolean parseExp() {
-		if (!_tokeniser.isNextValid()) return false;
-		if (!_tokeniser.hasNext()) {
-			return true;
-		}
-
-        // TODO: Complete this method
-		// START YOUR CODE
-
-
-
-		// END YOUR CODE
-		return false;
+        Token number = _tokeniser.takeNext();
+        if (number == null || number.type != Token.Type.NUMBER) return false;
+        if (!_tokeniser.isNextValid()) return false;
+        if (!_tokeniser.hasNext()) return true;
+        if (_tokeniser.takeNext().type != Token.Type.MATH_OPERATION) return false;
+        return parseExp();
     }
 
 }

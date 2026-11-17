@@ -1,8 +1,5 @@
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Skeleton code for Red Black Tree
@@ -282,9 +279,23 @@ public class RBTree<K extends Comparable<K>, T> {
 
 		List<Node> ret = new LinkedList<>();
 
-		// ########## YOUR CODE STARTS HERE ##########
-		
 
+		// ########## YOUR CODE STARTS HERE ##########
+		Queue<Node> queue = new ArrayDeque<>();
+		if (this.root == null) {
+			return ret;
+		}
+		queue.add(this.root);
+		while (!queue.isEmpty()) {
+			Node current = queue.remove();
+			ret.add(current);
+			if (current.right != null && current.right.key != null) {
+				queue.add(current.right);
+			}
+			if (current.left != null && current.left.key != null) {
+				queue.add(current.left);
+			}
+		}
 
 		// ########## YOUR CODE ENDS HERE ##########
 

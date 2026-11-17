@@ -1,7 +1,7 @@
 public abstract class HashingBox {
 
     public int hash(Thing thing) throws ComponentOutOfRangeException {
-        if ((thing.getSize() > 31) || (thing.getSize() < 0)) {throw new ComponentOutOfRangeException(); }
+        if ((thing.getSize() > 31) || (thing.getSize() < 1)) {throw new ComponentOutOfRangeException(); }
 
         int sizeHash = this.hashSize(thing.getSize());
         int nameHash = this.hashName(thing.getName(), sizeHash);

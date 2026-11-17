@@ -1,3 +1,9 @@
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.util.ArrayList;
 import java.io.File;
 import java.util.List;
 
@@ -37,11 +43,29 @@ public class TreeCollection {
 	 * @param file
 	 */
 	public void saveToFile(File file) {
-		//START YOUT CODE
-		
-		
-		//END YOUT CODE
-	}
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            Element root = doc.createElement("trees");
+            doc.appendChild(root);
+            for (Tree value : trees) {
+                Element entry = doc.createElement("tree");
+                root.appendChild(entry);
+                entry.setAttribute("kind", value.getKind());
+                if (value.getDimension() != null) {
+                    Element dim = doc.createElement("dimension");
+                    dim.setAttribute("diameter", value.getDimension().getDiameter().toString());
+                    dim.setAttribute("height", value.getDimension().getHeight().toString());
+                    entry.appendChild(dim);
+                }
+                if (value.getColor() != null) append(doc, entry, "color", value.getColor());
+                if (value.getTypes() != null) {
+                    Element types = doc.createElement("types"); entry.appendChild(types);
+                    for (String type : value.getTypes()) append(doc, types, "type", type);
+                }
+            }
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc), new StreamResult(file));
+        } catch (Exception e) { throw new IllegalStateException("Cannot save XML", e); }
+    }
 
 	/**
 	 * Implement this method to load from the XML file to create a `TreeCollection`
@@ -50,11 +74,27 @@ public class TreeCollection {
 	 * @return
 	 */
 	public static TreeCollection loadFromFile(File file) {
-		//START YOUT CODE
-		
-		
-		//END YOUT CODE	
-	}
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+            List<Tree> result = new ArrayList<>();
+            NodeList entries = doc.getDocumentElement().getElementsByTagName("tree");
+            for (int i = 0; i < entries.getLength(); i++) {
+                Element entry = (Element) entries.item(i);
+                Tree value = new Tree().withKind(entry.getAttribute("kind"));
+                NodeList dims = entry.getElementsByTagName("dimension");
+                if (dims.getLength() > 0) {
+                    Element d = (Element) dims.item(0);
+                    value.withDimension(new Dimension(Integer.parseInt(d.getAttribute("diameter")), Integer.parseInt(d.getAttribute("height"))));
+                }
+                NodeList colors = entry.getElementsByTagName("color");
+                if (colors.getLength() > 0) value.withColor(colors.item(0).getTextContent());
+                NodeList types = entry.getElementsByTagName("type");
+                for (int j = 0; j < types.getLength(); j++) value.addType(types.item(j).getTextContent());
+                result.add(value);
+            }
+            return new TreeCollection(result);
+        } catch (Exception e) { throw new IllegalStateException("Cannot load XML", e); }
+    }
 
 	@Override
 	public boolean equals(Object o) {
@@ -69,4 +109,10 @@ public class TreeCollection {
 
 		return false;
 	}
+    private static Element append(Document doc, Element parent, String tag, String text) {
+        Element child = doc.createElement(tag);
+        child.setTextContent(text);
+        parent.appendChild(child);
+        return child;
+    }
 }

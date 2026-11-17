@@ -1,5 +1,11 @@
 ## COMP2100 Practice Questions
 
+**Study files:** `LOCATOR.md` (topic and file-path index), `MCQ-SAQ-STUDY-GUIDE.md` (extended context), `MCQ-NOTES.md` (answer explanations), and `VERIFICATION.md` (previous Java verification results).
+
+**Linux exam setup:** see `LINUX-SETUP.md` for ZIP extraction, multiple attachments, optional Git setup, and example Java/JUnit commands. The repository contains independent question groups; run one at a time.
+
+The HTML readers and their supporting scripts have been removed. Read the relative paths in the locator and open the desired file manually.
+
 Students,
 
 This repository contains a selection of programming problems on material related to the course designed to help you prepare for the exam.

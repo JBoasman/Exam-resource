@@ -13,21 +13,20 @@ public class Tokeniser {
 	 * the token to {@code currentToken}.
 	 */
 	public void next() {
-
-		buffer = buffer.trim(); // remove whitespace
-		if (buffer.isEmpty()) {
-			currentToken = null; // if there's no string left, set currentToken null and return
-			return;
-		}
-
-		// ########## YOUR CODE STARTS HERE ##########
-
-		// ########## YOUR CODE ENDS HERE ##########
-
-		// Remove the extracted token from buffer
-		int tokenLen = currentToken.getValue().length();
-		buffer = buffer.substring(tokenLen);
-	}
+        buffer = buffer.trim();
+        if (buffer.isEmpty()) { currentToken = null; return; }
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("^;|^[^\\s;]+").matcher(buffer);
+        if (!m.find()) throw new IllegalArgumentException("Invalid token");
+        String value = m.group();
+        Token.Type type;
+        if (value.equals(";")) type = Token.Type.TERMINATOR;
+        else {
+            try { type = Token.Type.valueOf(value.toUpperCase(java.util.Locale.ROOT)); }
+            catch (IllegalArgumentException e) { type = Token.Type.PARAMETER; }
+        }
+        currentToken = new Token(type, value);
+        buffer = buffer.substring(value.length());
+    }
 
 	/**
 	 * returned the current token extracted by {@code next()} **** please do not

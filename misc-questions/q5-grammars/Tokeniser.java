@@ -15,16 +15,10 @@ public class Tokeniser {
      * @return the next token OR null when there is no more token or the next token is invalid.
      */
     public Token next() {
-        if (_buffer.isEmpty())
-            return null;
-
-        // TODO: Complete this method
-        // START YOUR CODE
-
-
-
-        // END YOUR CODE
-
+        if (_buffer.isEmpty()) return null;
+        char c = _buffer.charAt(0);
+        if (c == '(') return new Token(Token.Type.LEFT_BRACKET, "(");
+        if (c == ')') return new Token(Token.Type.RIGHT_BRACKET, ")");
         return null;
     }
 

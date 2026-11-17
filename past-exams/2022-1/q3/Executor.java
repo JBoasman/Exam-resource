@@ -27,16 +27,9 @@ public class Executor {
 	}
 
 	private NodeCopy load(LoadCommand c) {
-
-		NodeCopy copy = null;
-
-		// TODO
-		// ########## YOUR CODE STARTS HERE ##########
-
-		// ########## YOUR CODE ENDS HERE ##########
-
-		return copy;
-	}
+        Node node = memory.find(c.getKey());
+        return node == null ? null : new NodeCopy(node);
+    }
 
 	/**
 	 * return the nodecopy of the save command key to be saved into memory
@@ -45,15 +38,11 @@ public class Executor {
 	 * @return
 	 */
 	private NodeCopy save(SaveCommand c) {
-
-		NodeCopy copy = null;
-		// TODO
-		// ########## YOUR CODE STARTS HERE ##########
-
-		// ########## YOUR CODE ENDS HERE ##########
-
-		return copy;
-	}
+        Node node = memory.find(c.getKey());
+        if (node == null) { node = new Node(c.getKey(), c.getValue()); memory.insert(node); }
+        else node.value = c.getValue();
+        return new NodeCopy(node);
+    }
 
 	/**
 	 * return the nodecopy of the sum command key to be saved into memory
@@ -62,16 +51,15 @@ public class Executor {
 	 * @return
 	 */
 	private NodeCopy sum(SumCommand c) {
-
-		NodeCopy copy = null;
-
-		// TODO
-		// ########## YOUR CODE STARTS HERE ##########
-
-		// ########## YOUR CODE ENDS HERE ##########
-
-		return copy;
-	}
+        String pattern = c.getPattern();
+        int wildcard = pattern.indexOf('*'), total = 0;
+        for (Node node : memory.invertedPreOrder()) {
+            boolean matches = wildcard < 0 ? node.key.equals(pattern)
+                : node.key.length() >= pattern.length() - 1 && node.key.startsWith(pattern.substring(0, wildcard)) && node.key.endsWith(pattern.substring(wildcard + 1));
+            if (matches) total += node.value;
+        }
+        return save(new SaveCommand(c.getKey(), total));
+    }
 
 	public List<Command> getCommands() {
 		return commands;

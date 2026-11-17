@@ -20,18 +20,12 @@ class EmptyTree extends Tree {
 
     @Override
     public String show() {
-        // TODO - Start your code
-
-        return null;
-        // TODO - End your code
+        return "";
     }
 
     @Override
     public String show(int depth) {
-        // TODO - Start your code
-
-        return null;
-        // TODO - End your code
+        return "";
     }
 
 

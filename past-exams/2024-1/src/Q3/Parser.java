@@ -26,11 +26,11 @@ public class Parser {
      * so you may check `this.currentToken` to determine your next action.
      */
     public List<InputToken> getAllTokens() {
-        // TODO - Your code starts here
-
-
-        return null;  // TODO - Please feel free to change this line.
-        // TODO - Your code ends here
+        List<InputToken> tokens = new java.util.ArrayList<>();
+        while (tokeniser.getCurrentToken() != null) {
+            tokens.add(tokeniser.getCurrentToken()); tokeniser.next();
+        }
+        return tokeniser.isEmpty() ? tokens : null;
     }
 
 }

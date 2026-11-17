@@ -16,10 +16,26 @@ public class RBTree<T extends Comparable<T>> {
 	 * @return
 	 */
 	public boolean testProp3() {
-		// START YOUR CODE
-		
-		return false; //you are allowed to change this return statement
-		// END YOUR CODE
+		if (checkProp3(this.root) == -1) {
+			return false;
+		}
+		return true;
+	}
+
+	public int checkProp3(Node<T> node) {
+		if (node == null) {
+			return 0;
+		}
+		int l = checkProp3(node.left);
+		int r = checkProp3(node.right);
+		if (l == -1 || r == -1 || l != r) {
+			return -1;
+		}
+		if (node.colour == Colour.BLACK) {
+			return 1 + l;
+		}
+		return l;
+
 	}
 
 	/**

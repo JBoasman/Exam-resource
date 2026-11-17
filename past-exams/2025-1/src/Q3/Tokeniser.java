@@ -21,24 +21,27 @@ public class Tokeniser {
      * Notes: The tokenisation process should be case-sensitive on the token strings.
      */
     public Token next() {
-        // TODO - Start your code
-
-        return null;
-        // TODO - End your code
+        // Look ahead; takeNext() below owns removal from the buffer.
+        currentToken = null;
+        if (buffer.isEmpty()) return null;
+        char c = buffer.charAt(0);
+        int length = 1;
+        TokenType type;
+        if (c >= '0' && c <= '9') {
+            while (length < buffer.length() && buffer.charAt(length) >= '0' && buffer.charAt(length) <= '9') length++;
+            type = TokenType.INT;
+        } else if (c >= 'a' && c <= 'z') type = TokenType.VARIABLE;
+        else if (c == '+' || c == '-' || c == '*') type = TokenType.OPERATOR;
+        else if (c == ';') type = TokenType.EOL;
+        else return null;
+        currentToken = new Token(type, buffer.substring(0, length));
+        return currentToken;
     }
 
     public Token takeNext() {
-        if (!this.hasNext()) {
-            this.currentToken = null;
-            return null;
-        }
-
-        Token nextToken = this.next();
-
-        this.buffer = this.buffer.substring(nextToken.getValue().length());
-        this.buffer = this.buffer.trim();
-        this.currentToken = nextToken;
-        return nextToken;
+        Token token = next();
+        if (token != null) buffer = buffer.substring(token.getValue().length()).trim();
+        return token;
     }
 
     public Token current() {

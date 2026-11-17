@@ -25,10 +25,26 @@ public class Tokeniser {
      *   -  The tokenisation process should be case-insensitive on the token strings.
      */
     public void next() {
-        // TODO - Your code starts here
-
-
-        // TODO - Your code ends here
+        buffer = buffer.replaceFirst("^ +", "");
+        currentToken = null;
+        if (buffer.isEmpty()) return;
+        int length = 0;
+        for (TokenType type : new TokenType[]{TokenType.UNDO, TokenType.REDO, TokenType.CAPITALISE, TokenType.SEPARATOR}) {
+            if (buffer.regionMatches(true, 0, type.getStr(), 0, type.getStr().length())) {
+                currentToken = new InputToken(type); length = type.getStr().length(); break;
+            }
+        }
+        if (currentToken == null && Character.isDigit(buffer.charAt(0))) {
+            while (length < buffer.length() && Character.isDigit(buffer.charAt(length))) length++;
+            try {
+                int value = Integer.parseInt(buffer.substring(0, length));
+                if (value < 1000) currentToken = new InputToken(TokenType.OCCURRENCES, value);
+            } catch (NumberFormatException e) { return; }
+        }
+        if (currentToken == null && ((buffer.charAt(0) >= 'a' && buffer.charAt(0) <= 'z') || (buffer.charAt(0) >= 'A' && buffer.charAt(0) <= 'Z'))) {
+            currentToken = new InputToken(TokenType.TYPE); length = 1;
+        }
+        if (currentToken != null) buffer = buffer.substring(length);
     }
 
 
